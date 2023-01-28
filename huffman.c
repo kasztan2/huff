@@ -39,7 +39,6 @@ void koduj(int ile_plikow, unsigned char **nazwy_plikow, unsigned char **kodowan
         pot=1;
 
         char ile_znakow_w_nazwie=(char)strlen(nazwy_plikow[i]);
-        //printf("znakow %d\nnazwa pliku: %s\n", ile_znakow_w_nazwie, nazwy_plikow[i]);
         fwrite(&ile_znakow_w_nazwie, sizeof(char), 1, ptr);
         fwrite(nazwy_plikow[i], sizeof(char), ile_znakow_w_nazwie, ptr);
 
@@ -69,9 +68,7 @@ void koduj(int ile_plikow, unsigned char **nazwy_plikow, unsigned char **kodowan
         fclose(plik);
         ile_bitow_ostatniego_bajtu[i]=licznik;
         ile_bajtow[i]=licznik_bajtow;
-        printf("%s bajtow: %lld\n", nazwy_plikow[i], licznik_bajtow);
     }
-    //fflush(ptr);
     fclose(ptr);
     FILE *beginning_ptr=fopen(plik_wyj, "wb");
     fwrite(&ile_plikow, sizeof(int), 1, beginning_ptr);
@@ -96,7 +93,6 @@ void koduj(int ile_plikow, unsigned char **nazwy_plikow, unsigned char **kodowan
         fwrite(&suma, sizeof(unsigned int), 1, beginning_ptr);
     }
 
-    //fclose(ptr);
     FILE *do_skopiowania=fopen("huffman.temp", "rb");
 
     char ch;
@@ -225,26 +221,20 @@ void odkoduj(unsigned char *nazwa_pliku)
     {
         char dl_nazwy;
         fread(&dl_nazwy, sizeof(char), 1, ptr);
-        //printf("dl nazwy: %d\n", dl_nazwy);
         char nazwa_pliku[dl_nazwy+1];
         nazwa_pliku[dl_nazwy]='\0';
         fread(&nazwa_pliku, sizeof(unsigned char), dl_nazwy, ptr);
 
         FILE *plik_wyj=fopen(nazwa_pliku, "w");
-        //printf("%s %d\n", nazwa_pliku, plik_wyj);
-        printf("ile bajtow: %d\n", ile_bajtow[i]);
         for(long long nr_bajtu=0; nr_bajtu<ile_bajtow[i]-1; ++nr_bajtu)
         {
-            printf("nr bajtu %lld\n", nr_bajtu);
             fread(&wej, sizeof(char), 1, ptr);
-            if(feof(ptr))printf("EOF!!!\n");
             for(int bit=0; bit<8; ++bit)
             {
                 if(wej%2==1)it=it->lewy;
                 else it=it->prawy;
                 if(it->ma_wart)
                 {
-                    //printf("%d\n", plik_wyj);
                     fprintf(plik_wyj, "%c", it->wart);
                     it=drzewko;
                 }
