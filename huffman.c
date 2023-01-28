@@ -44,7 +44,7 @@ void koduj(int ile_plikow, unsigned char **nazwy_plikow, unsigned char **kodowan
 
         while((ch=fgetc(plik))!=EOF)
         {
-            for(int i=0; i<258; ++i)//TODO powinno być mniej w sumie
+            for(int i=0; i<258; ++i)
             {
                 if(kodowania[ch][i]=='\0')break;
                 if(kodowania[ch][i]=='1')b+=pot;
