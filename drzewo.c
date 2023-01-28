@@ -3,7 +3,7 @@
 #include <math.h>
 #include "drzewo.h"
 
-tree nowe_drzewo(char wart, long long prawd)
+tree nowe_drzewo(unsigned char wart, long long prawd)
 {
     tree drzewko=malloc(sizeof(Node));
     drzewko->wart=wart;
