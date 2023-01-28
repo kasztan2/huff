@@ -32,7 +32,7 @@ void koduj(int ile_plikow, unsigned char **nazwy_plikow, unsigned char **kodowan
     for(int i=0; i<ile_plikow; ++i)
     {
         FILE *plik=fopen(nazwy_plikow[i], "r");
-        char ch;
+        short ch;
         b=0;
         licznik=0;
         licznik_bajtow=0;
@@ -46,6 +46,7 @@ void koduj(int ile_plikow, unsigned char **nazwy_plikow, unsigned char **kodowan
         {
             for(int i=0; i<258; ++i)
             {
+                //printf("%d\n", ch);
                 if(kodowania[ch][i]=='\0')break;
                 if(kodowania[ch][i]=='1')b+=pot;
                 ++licznik;
