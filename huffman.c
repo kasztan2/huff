@@ -139,7 +139,7 @@ void zakoduj(int ile_plikow, unsigned char **nazwy_plikow, char *plik_wyj)
         nazwy_plikow[i]=nazwy_plikow[i+3];
     }
     znak znaki_prawd[256];
-    for(int i=0; i<256; ++i){znaki_prawd[i].prawd=0;znaki_prawd[i].c=i;}
+    for(int i=0; i<256; ++i){znaki_prawd[i].prawd=1;znaki_prawd[i].c=i;}
     for(int i=0; i<ile_plikow; ++i)policz_prawdopodobienstwa(znaki_prawd, nazwy_plikow[i]);
     qsort(znaki_prawd, 256, sizeof(znak), comp_znaki_prawd);
 
