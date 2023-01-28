@@ -14,5 +14,5 @@ typedef struct znak
 
 void policz_prawdopodobienstwa(znak prawd[256], char *nazwa_pliku);
 void zakoduj(int ile_plikow, char **nazwy_plikow);
-void odkoduj(int argc, char **argv);
+void odkoduj(int argc, char *argv);
 #endif

@@ -9,6 +9,6 @@ int main(int argc, char **argv)
     }
 
     if(strcmp(argv[1], "encode")==0)zakoduj(argc-2, argv+2);
-    else if(strcmp(argv[1], "decode")==0)odkoduj(argc-2, argv+2);
+    else if(strcmp(argv[1], "decode")==0)odkoduj(argc-2, *(argv+2));
     else fprintf(stderr, "Zła opcja!\n");
 }

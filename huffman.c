@@ -68,6 +68,37 @@ void koduj(int ile_plikow, char **nazwy_plikow, char **kodowania, FILE *ptr)
         ile_bitow_ostatniego_bajtu[i]=licznik;
         ile_bajtow[i]=licznik_bajtow;
     }
+    FILE *beginning_ptr=fopen("output", "wb");
+    fwrite(&ile_plikow, sizeof(int), 1, ptr);
+    for(int i=0; i<ile_plikow; ++i)
+    {
+        fwrite(&ile_bajtow[i], sizeof(long long), 1, beginning_ptr);
+        fwrite(&ile_bitow_ostatniego_bajtu[i], sizeof(char), 1, beginning_ptr);
+    }
+    for(int i=0; i<128; ++i)
+    {
+        //printf("pocz %d\n", i);
+        int suma=0, pot=1;
+        for(char *ptr_kodowanie=kodowania[i]; (*ptr_kodowanie)!='\0'; ++ptr_kodowanie)
+        {
+            if(*ptr_kodowanie=='1')suma+=pot;
+            pot*=2;
+        }
+        //printf("test\n");
+        fwrite(&suma, sizeof(int), 1, beginning_ptr);
+    }
+
+    fclose(ptr);
+    FILE *do_skopiowania=fopen("huffman.temp", "rb");
+
+    char ch;
+    while((ch=getc(do_skopiowania))!=EOF)
+    {
+        fwrite(&ch, sizeof(char), 1, beginning_ptr);
+    }
+
+    fclose(beginning_ptr);
+    remove("huffman.temp");
 }
 
 void wpisz_kodowania(tree drzewko, char **kodowania, char *sciezka, int *dl_sciezki)
@@ -127,13 +158,13 @@ void zakoduj(int ile_plikow, char **nazwy_plikow)
     dl_sciezki=0;
     wpisz_kodowania(drzewko_huffmana, kodowania, sciezka, &dl_sciezki);
     
-    FILE *output=fopen("output", "wb");
+    FILE *output=fopen("huffman.temp", "wb");
     koduj(ile_plikow, nazwy_plikow, kodowania, output);
 
-    fclose(output);
+    //fclose(output);
 }
 
-void odkoduj(int argc, char **argv)
+void odkoduj(int argc, char *argv)
 {
 
 }
