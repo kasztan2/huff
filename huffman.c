@@ -14,7 +14,7 @@ void policz_prawdopodobienstwa(znak prawd[256], unsigned char *nazwa_pliku)
 {
     FILE *plik=fopen(nazwa_pliku, "r");
     char ch;
-    while((ch=getc(plik))!=EOF)
+    while(!feof(plik)&&(ch=fgetc(plik))!=EOF)
     {
         ++prawd[ch].prawd;
     }
@@ -36,14 +36,16 @@ void koduj(int ile_plikow, unsigned char **nazwy_plikow, unsigned char **kodowan
         b=0;
         licznik=0;
         licznik_bajtow=0;
+        pot=1;
 
-        char ile_znakow_w_nazwie=strlen(nazwy_plikow[i]);
+        char ile_znakow_w_nazwie=(char)strlen(nazwy_plikow[i]);
+        //printf("znakow %d\nnazwa pliku: %s\n", ile_znakow_w_nazwie, nazwy_plikow[i]);
         fwrite(&ile_znakow_w_nazwie, sizeof(char), 1, ptr);
         fwrite(nazwy_plikow[i], sizeof(char), ile_znakow_w_nazwie, ptr);
 
-        while((ch=getc(plik))!=EOF)
+        while((ch=fgetc(plik))!=EOF)
         {
-            for(int i=0; i<258; ++i)
+            for(int i=0; i<258; ++i)//TODO powinno być mniej w sumie
             {
                 if(kodowania[ch][i]=='\0')break;
                 if(kodowania[ch][i]=='1')b+=pot;
@@ -67,7 +69,10 @@ void koduj(int ile_plikow, unsigned char **nazwy_plikow, unsigned char **kodowan
         fclose(plik);
         ile_bitow_ostatniego_bajtu[i]=licznik;
         ile_bajtow[i]=licznik_bajtow;
+        printf("%s bajtow: %lld\n", nazwy_plikow[i], licznik_bajtow);
     }
+    //fflush(ptr);
+    fclose(ptr);
     FILE *beginning_ptr=fopen(plik_wyj, "wb");
     fwrite(&ile_plikow, sizeof(int), 1, beginning_ptr);
 
@@ -79,7 +84,7 @@ void koduj(int ile_plikow, unsigned char **nazwy_plikow, unsigned char **kodowan
     for(int i=0; i<256; ++i)
     {
         unsigned int suma=0, pot=1;
-        char it=0;
+        unsigned char it=0;
         for(char *ptr_kodowanie=kodowania[i]; (*ptr_kodowanie)!='\0'; ++ptr_kodowanie)
         {
             if(*ptr_kodowanie=='1')suma+=pot;
@@ -91,25 +96,28 @@ void koduj(int ile_plikow, unsigned char **nazwy_plikow, unsigned char **kodowan
         fwrite(&suma, sizeof(unsigned int), 1, beginning_ptr);
     }
 
-    fclose(ptr);
+    //fclose(ptr);
     FILE *do_skopiowania=fopen("huffman.temp", "rb");
 
     char ch;
-    while((ch=getc(do_skopiowania))!=EOF)
+    int przepisano=0;
+    while(!feof(do_skopiowania))//((ch=fgetc(do_skopiowania))!=EOF)//? dlaczego taka wersja tutaj nie działała?
     {
+        ch=fgetc(do_skopiowania);
+        if(feof(do_skopiowania))break;
+        ++przepisano;
         fwrite(&ch, sizeof(char), 1, beginning_ptr);
     }
 
     fclose(beginning_ptr);
+    fclose(do_skopiowania);
     remove("huffman.temp");
 }
 
 void wpisz_kodowania(tree drzewko, unsigned char **kodowania, unsigned char *sciezka, int *dl_sciezki)
 {
-
     if(drzewko->ma_wart)
     {
-
         kodowania[drzewko->wart]=calloc(sizeof(unsigned char), 260);
         strcpy(kodowania[drzewko->wart], sciezka);
         sciezka[*dl_sciezki]='\0';
@@ -129,15 +137,18 @@ void wpisz_kodowania(tree drzewko, unsigned char **kodowania, unsigned char *sci
 
 void zakoduj(int ile_plikow, unsigned char **nazwy_plikow, char *plik_wyj)
 {
+    for(int i=0; i<ile_plikow+3; ++i)
+    {
+        nazwy_plikow[i]=nazwy_plikow[i+3];
+    }
     znak znaki_prawd[256];
     for(int i=0; i<256; ++i){znaki_prawd[i].prawd=0;znaki_prawd[i].c=i;}
-    for(int i=0; i<ile_plikow; ++i)policz_prawdopodobienstwa(znaki_prawd, *nazwy_plikow+i);
+    for(int i=0; i<ile_plikow; ++i)policz_prawdopodobienstwa(znaki_prawd, nazwy_plikow[i]);
     qsort(znaki_prawd, 256, sizeof(znak), comp_znaki_prawd);
 
     lista drzewa=nowa_lista(nowe_drzewo(znaki_prawd[0].c, znaki_prawd[0].prawd));
     for(int i=1; i<256; ++i)
     {
-
         drzewa=dodaj_element(drzewa, nowe_drzewo(znaki_prawd[i].c, znaki_prawd[i].prawd));
     }
     for(int i=0; i<254; ++i)
@@ -185,8 +196,8 @@ void odkoduj(unsigned char *nazwa_pliku)
 
     for(int i=0; i<256; ++i)
     {
-        char dl;
-        fread(&dl, sizeof(char), 1, ptr);
+        unsigned char dl;
+        fread(&dl, sizeof(unsigned char), 1, ptr);
         fread(&kodowanie, sizeof(int), 1, ptr);
 
         it=drzewko;
@@ -214,24 +225,26 @@ void odkoduj(unsigned char *nazwa_pliku)
     {
         char dl_nazwy;
         fread(&dl_nazwy, sizeof(char), 1, ptr);
+        //printf("dl nazwy: %d\n", dl_nazwy);
         char nazwa_pliku[dl_nazwy+1];
         nazwa_pliku[dl_nazwy]='\0';
-        for(int j=0; j<dl_nazwy; ++j)
-        {
-            fread(&nazwa_pliku[j], sizeof(char), 1, ptr);
-        }
+        fread(&nazwa_pliku, sizeof(unsigned char), dl_nazwy, ptr);
 
         FILE *plik_wyj=fopen(nazwa_pliku, "w");
-        for(int nr_bajtu=0; nr_bajtu<ile_bajtow[i]-1; ++nr_bajtu)
+        //printf("%s %d\n", nazwa_pliku, plik_wyj);
+        printf("ile bajtow: %d\n", ile_bajtow[i]);
+        for(long long nr_bajtu=0; nr_bajtu<ile_bajtow[i]-1; ++nr_bajtu)
         {
-
-            fread(&wej, sizeof(unsigned char), 1, ptr);
+            printf("nr bajtu %lld\n", nr_bajtu);
+            fread(&wej, sizeof(char), 1, ptr);
+            if(feof(ptr))printf("EOF!!!\n");
             for(int bit=0; bit<8; ++bit)
             {
                 if(wej%2==1)it=it->lewy;
                 else it=it->prawy;
                 if(it->ma_wart)
                 {
+                    //printf("%d\n", plik_wyj);
                     fprintf(plik_wyj, "%c", it->wart);
                     it=drzewko;
                 }
@@ -239,6 +252,7 @@ void odkoduj(unsigned char *nazwa_pliku)
             }
         }
         fread(&wej, sizeof(unsigned char), 1, ptr);
+        if(ile_bitow_na_koncu[i]==0)ile_bitow_na_koncu[i]=8;
         for(int bit=0; bit<ile_bitow_na_koncu[i]; ++bit)
         {
             if(wej%2==1)it=it->lewy;
