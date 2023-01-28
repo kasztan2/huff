@@ -244,7 +244,7 @@ void odkoduj(unsigned char *nazwa_pliku)
         }
         fread(&wej, sizeof(unsigned char), 1, ptr);
         if(ile_bitow_na_koncu[i]==0)ile_bitow_na_koncu[i]=8;
-        for(int bit=0; bit<ile_bitow_na_koncu[i]; ++bit)
+        for(int bit=0; ile_bajtow[i]>0&&bit<ile_bitow_na_koncu[i]; ++bit)
         {
             if(wej%2==1)it=it->lewy;
             else it=it->prawy;
