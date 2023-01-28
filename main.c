@@ -2,6 +2,16 @@
 
 int main(int argc, unsigned char **argv)
 {
+    for(int i=1; i<argc; ++i)
+    {
+        if(strcmp(argv[i], "-h")==0)
+        {
+            printf("Instrukcja:\n");
+            printf("encode <plik wyjściowy> <plik wejściowy 1> <plik wejściowy 2> ...\n");
+            printf("decode <nazwa pliku archiwum do rozpakowania>\n");
+            return 0;
+        }
+    }
     if(argc<=2)
     {
         fprintf(stderr, "Nieprawidłowe polecenie!\n");
