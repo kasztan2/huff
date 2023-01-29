@@ -5,14 +5,14 @@
 typedef struct
 {
     bool ma_wart;
-    unsigned char wart;
+    char wart;
     long long prawd;
     struct Node *lewy, *prawy;
 } Node;
 
 typedef Node* tree;
 
-tree nowe_drzewo(unsigned char wart, long long prawd);
+tree nowe_drzewo(char wart, long long prawd);
 tree nowe_drzewo_puste();
 
 
