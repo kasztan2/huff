@@ -1,6 +1,8 @@
 #include "huffman.h"
 #include "drzewo.h"
 
+static long long bajty;
+
 int comp_znaki_prawd(const void *x, const void *y)
 {
     znak *a=(znak*)x;
@@ -44,9 +46,9 @@ void koduj(int ile_plikow, unsigned char **nazwy_plikow, unsigned char **kodowan
 
         while((ch=fgetc(plik))!=EOF)
         {
+            ++bajty;
             for(int i=0; i<258; ++i)
             {
-                //printf("%d\n", ch);
                 if(kodowania[ch][i]=='\0')break;
                 if(kodowania[ch][i]=='1')b+=pot;
                 ++licznik;
@@ -63,6 +65,7 @@ void koduj(int ile_plikow, unsigned char **nazwy_plikow, unsigned char **kodowan
         }
         if(licznik>0)
         {
+            ++bajty;
             fwrite(&b, sizeof(unsigned char), 1, ptr);
             ++licznik_bajtow;
         }
@@ -132,11 +135,12 @@ void wpisz_kodowania(tree drzewko, unsigned char **kodowania, unsigned char *sci
     (*dl_sciezki)--;
 }
 
-void zakoduj(int ile_plikow, unsigned char **nazwy_plikow, char *plik_wyj)
+void zakoduj(int odkad, int ile_plikow, unsigned char **nazwy_plikow, char *plik_wyj, bool stats)
 {
-    for(int i=0; i<ile_plikow+3; ++i)
+    bajty=0;
+    for(int i=0; i<ile_plikow; ++i)
     {
-        nazwy_plikow[i]=nazwy_plikow[i+3];
+        nazwy_plikow[i]=nazwy_plikow[i+odkad];
     }
     znak znaki_prawd[256];
     for(int i=0; i<256; ++i){znaki_prawd[i].prawd=1;znaki_prawd[i].c=i;}
@@ -170,6 +174,15 @@ void zakoduj(int ile_plikow, unsigned char **nazwy_plikow, char *plik_wyj)
 
     free(kodowania);
     free(sciezka);
+    if(stats)
+    {
+        FILE *wyjscie=fopen(plik_wyj, "r");
+        fseek(wyjscie, 0L, SEEK_END);
+        printf("Rozmiar przed kompresją: %lld\n", bajty);
+        long rozm=ftell(wyjscie);
+        printf("Rozmiar po kompresji: %i\n", rozm);
+        fclose(wyjscie);
+    }
 }
 
 void odkoduj(unsigned char *nazwa_pliku)
