@@ -1,6 +1,6 @@
 #include "huffman.h"
 
-int main(int argc, char **argv)
+int main(int argc, unsigned char **argv)
 {
     for(int i=1; i<argc; ++i)
     {

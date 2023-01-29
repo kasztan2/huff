@@ -10,7 +10,7 @@ int comp_znaki_prawd(const void *x, const void *y)
     return 0;
 }
 
-void policz_prawdopodobienstwa(znak prawd[256], char *nazwa_pliku)
+void policz_prawdopodobienstwa(znak prawd[256], unsigned char *nazwa_pliku)
 {
     FILE *plik=fopen(nazwa_pliku, "r");
     char ch;
@@ -21,11 +21,11 @@ void policz_prawdopodobienstwa(znak prawd[256], char *nazwa_pliku)
     fclose(plik);
 }
 
-void koduj(int ile_plikow, char **nazwy_plikow, char **kodowania, FILE *ptr, char *plik_wyj)
+void koduj(int ile_plikow, unsigned char **nazwy_plikow, unsigned char **kodowania, FILE *ptr, char *plik_wyj)
 {
-    char b=0, pot=1;
-    char licznik=0;
-    char ile_bitow_ostatniego_bajtu[ile_plikow];
+    unsigned char b=0, pot=1;
+    unsigned char licznik=0;
+    unsigned char ile_bitow_ostatniego_bajtu[ile_plikow];
     long long licznik_bajtow=0;
     long long ile_bajtow[ile_plikow];
 
@@ -53,7 +53,7 @@ void koduj(int ile_plikow, char **nazwy_plikow, char **kodowania, FILE *ptr, cha
                 pot*=2;
                 if(licznik==8)
                 {
-                    fwrite(&b, sizeof(char), 1, ptr);
+                    fwrite(&b, sizeof(unsigned char), 1, ptr);
                     licznik=0;
                     b=0;
                     pot=1;
@@ -63,7 +63,7 @@ void koduj(int ile_plikow, char **nazwy_plikow, char **kodowania, FILE *ptr, cha
         }
         if(licznik>0)
         {
-            fwrite(&b, sizeof(char), 1, ptr);
+            fwrite(&b, sizeof(unsigned char), 1, ptr);
             ++licznik_bajtow;
         }
         fclose(plik);
@@ -77,12 +77,12 @@ void koduj(int ile_plikow, char **nazwy_plikow, char **kodowania, FILE *ptr, cha
     for(int i=0; i<ile_plikow; ++i)
     {
         fwrite(&ile_bajtow[i], sizeof(long long), 1, beginning_ptr);
-        fwrite(&ile_bitow_ostatniego_bajtu[i], sizeof(char), 1, beginning_ptr);
+        fwrite(&ile_bitow_ostatniego_bajtu[i], sizeof(unsigned char), 1, beginning_ptr);
     }
     for(int i=0; i<256; ++i)
     {
         unsigned int suma=0, pot=1;
-        char it=0;
+        unsigned char it=0;
         for(char *ptr_kodowanie=kodowania[i]; (*ptr_kodowanie)!='\0'; ++ptr_kodowanie)
         {
             if(*ptr_kodowanie=='1')suma+=pot;
@@ -111,11 +111,11 @@ void koduj(int ile_plikow, char **nazwy_plikow, char **kodowania, FILE *ptr, cha
     remove("huffman.temp");
 }
 
-void wpisz_kodowania(tree drzewko, char **kodowania, char *sciezka, int *dl_sciezki)
+void wpisz_kodowania(tree drzewko, unsigned char **kodowania, unsigned char *sciezka, int *dl_sciezki)
 {
     if(drzewko->ma_wart)
     {
-        kodowania[drzewko->wart]=calloc(sizeof(char), 260);
+        kodowania[drzewko->wart]=calloc(sizeof(unsigned char), 260);
         strcpy(kodowania[drzewko->wart], sciezka);
         sciezka[*dl_sciezki]='\0';
         --*dl_sciezki;
@@ -132,7 +132,7 @@ void wpisz_kodowania(tree drzewko, char **kodowania, char *sciezka, int *dl_scie
     (*dl_sciezki)--;
 }
 
-void zakoduj(int ile_plikow, char **nazwy_plikow, char *plik_wyj)
+void zakoduj(int ile_plikow, unsigned char **nazwy_plikow, char *plik_wyj)
 {
     for(int i=0; i<ile_plikow+3; ++i)
     {
@@ -158,8 +158,8 @@ void zakoduj(int ile_plikow, char **nazwy_plikow, char *plik_wyj)
     drzewko_huffmana->prawd=drzewa->wart->prawd;
     drzewko_huffmana->prawd+=drzewa->next->wart->prawd;
 
-    char **kodowania=calloc(sizeof(char*), 260);
-    char *sciezka=calloc(sizeof(char), 260);
+    unsigned char **kodowania=calloc(sizeof(char*), 260);
+    unsigned char *sciezka=calloc(sizeof(char), 260);
     sciezka[0]='\0';
     int dl_sciezki;
     dl_sciezki=0;
@@ -172,7 +172,7 @@ void zakoduj(int ile_plikow, char **nazwy_plikow, char *plik_wyj)
     free(sciezka);
 }
 
-void odkoduj(char *nazwa_pliku)
+void odkoduj(unsigned char *nazwa_pliku)
 {
     FILE *ptr=fopen(nazwa_pliku, "rb");
 
@@ -193,8 +193,8 @@ void odkoduj(char *nazwa_pliku)
 
     for(int i=0; i<256; ++i)
     {
-        char dl;
-        fread(&dl, sizeof(char), 1, ptr);
+        unsigned char dl;
+        fread(&dl, sizeof(unsigned char), 1, ptr);
         fread(&kodowanie, sizeof(int), 1, ptr);
 
         it=drzewko;
@@ -213,10 +213,10 @@ void odkoduj(char *nazwa_pliku)
             kodowanie/=2;
         }
         it->ma_wart=true;
-        it->wart=(char)i;
+        it->wart=(unsigned char)i;
     }
 
-    char wej;
+    unsigned char wej;
     it=drzewko;
     for(int i=0; i<liczba_plikow; ++i)
     {
@@ -224,7 +224,7 @@ void odkoduj(char *nazwa_pliku)
         fread(&dl_nazwy, sizeof(char), 1, ptr);
         char nazwa_pliku[dl_nazwy+1];
         nazwa_pliku[dl_nazwy]='\0';
-        fread(&nazwa_pliku, sizeof(char), dl_nazwy, ptr);
+        fread(&nazwa_pliku, sizeof(unsigned char), dl_nazwy, ptr);
 
         FILE *plik_wyj=fopen(nazwa_pliku, "w");
         for(long long nr_bajtu=0; nr_bajtu<ile_bajtow[i]-1; ++nr_bajtu)
@@ -242,7 +242,7 @@ void odkoduj(char *nazwa_pliku)
                 wej/=2;
             }
         }
-        fread(&wej, sizeof(char), 1, ptr);
+        fread(&wej, sizeof(unsigned char), 1, ptr);
         if(ile_bitow_na_koncu[i]==0)ile_bitow_na_koncu[i]=8;
         for(int bit=0; ile_bajtow[i]>0&&bit<ile_bitow_na_koncu[i]; ++bit)
         {

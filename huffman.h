@@ -9,10 +9,10 @@
 typedef struct znak
 {
     long long prawd;
-    char c;
+    unsigned char c;
 } znak;
 
-void policz_prawdopodobienstwa(znak prawd[256], char *nazwa_pliku);
-void zakoduj(int ile_plikow, char **nazwy_plikow, char *plik_wyj);
-void odkoduj(char *nazwa_pliku);
+void policz_prawdopodobienstwa(znak prawd[256], unsigned char *nazwa_pliku);
+void zakoduj(int ile_plikow, unsigned char **nazwy_plikow, char *plik_wyj);
+void odkoduj(unsigned char *nazwa_pliku);
 #endif
