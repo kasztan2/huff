@@ -41,16 +41,16 @@ int main(int argc, char **argv)
         }
     }
 
-    if(plik_wyj==NULL)
+    if(optind>=argc-1)
+    {
+        fprintf(stderr, "Brakujący argument! Użyj %s -h, aby wyświetlić pomoc\n", argv[0]);
+        exit(EXIT_FAILURE);
+    }
+
+    if(plik_wyj==NULL&&strcmp(argv[optind], "encode")==0)
     {
         plik_wyj=calloc(sizeof(char), 10);
         plik_wyj="arch.huff";
-    }
-
-    if(optind>=argc)
-    {
-        fprintf(stderr, "Brakujący argument! Użyj -h, aby wyświetlić pomoc\n");
-        exit(EXIT_FAILURE);
     }
 
     if(debug_flag)
@@ -71,8 +71,9 @@ int main(int argc, char **argv)
     {
         odkoduj(*(argv+optind+1));
     }
-    else fprintf(stderr, "Złe polecenie! Użyj -h, aby wyświetlić pomoc\n");
+    else fprintf(stderr, "Złe polecenie! Użyj %s -h, aby wyświetlić pomoc\n", argv[0]);
 
     if(optarg!=NULL)free(optarg);
+    //if(plik_wyj!=NULL)free(plik_wyj);
     exit(EXIT_SUCCESS);
 }
