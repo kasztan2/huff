@@ -23,7 +23,7 @@ void policz_prawdopodobienstwa(znak prawd[256], unsigned char *nazwa_pliku)
     fclose(plik);
 }
 
-void koduj(int ile_plikow, unsigned char **nazwy_plikow, unsigned char **kodowania, FILE *ptr, char *plik_wyj)
+void koduj(int ile_plikow, char **nazwy_plikow, unsigned char **kodowania, FILE *ptr, char *plik_wyj)
 {
     unsigned char b=0, pot=1;
     unsigned char licznik=0;
@@ -135,7 +135,7 @@ void wpisz_kodowania(tree drzewko, unsigned char **kodowania, unsigned char *sci
     (*dl_sciezki)--;
 }
 
-void zakoduj(int odkad, int ile_plikow, unsigned char **nazwy_plikow, char *plik_wyj, bool stats)
+void zakoduj(int odkad, int ile_plikow, char **nazwy_plikow, char *plik_wyj, bool stats)
 {
     bajty=0;
     for(int i=0; i<ile_plikow; ++i)
@@ -179,8 +179,7 @@ void zakoduj(int odkad, int ile_plikow, unsigned char **nazwy_plikow, char *plik
         FILE *wyjscie=fopen(plik_wyj, "r");
         fseek(wyjscie, 0L, SEEK_END);
         printf("Rozmiar przed kompresją: %lld\n", bajty);
-        long rozm=ftell(wyjscie);
-        printf("Rozmiar po kompresji: %i\n", rozm);
+        printf("Rozmiar po kompresji: %ld\n", ftell(wyjscie));
         fclose(wyjscie);
     }
 }

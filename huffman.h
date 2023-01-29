@@ -13,6 +13,6 @@ typedef struct znak
 } znak;
 
 void policz_prawdopodobienstwa(znak prawd[256], unsigned char *nazwa_pliku);
-void zakoduj(int odkad, int ile_plikow, unsigned char **nazwy_plikow, char *plik_wyj, bool stats);
+void zakoduj(int odkad, int ile_plikow, char **nazwy_plikow, char *plik_wyj, bool stats);
 void odkoduj(unsigned char *nazwa_pliku);
 #endif

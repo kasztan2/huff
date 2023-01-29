@@ -2,7 +2,7 @@
 #define DRZEWO
 #include <stdbool.h>
 
-typedef struct
+typedef struct Node
 {
     bool ma_wart;
     unsigned char wart;
