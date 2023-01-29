@@ -1,2 +1,2 @@
 all:
-	gcc main.c huffman.c drzewo.c -o huff
+	gcc src/main.c src/huffman.c src/drzewo.c -o huff
