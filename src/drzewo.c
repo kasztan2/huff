@@ -28,6 +28,7 @@ lista nowa_lista(tree t)
     lista elem=malloc(sizeof(listElement));
     elem->next=NULL;
     elem->wart=t;
+    return elem;
 }
 
 lista dodaj_element(lista pocz, tree t)

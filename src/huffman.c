@@ -12,19 +12,19 @@ int comp_znaki_prawd(const void *x, const void *y)
     return 0;
 }
 
-void policz_prawdopodobienstwa(znak prawd[256], unsigned char *nazwa_pliku)
+void policz_prawdopodobienstwa(znak prawd[256], char *nazwa_pliku)
 {
     FILE *plik=fopen(nazwa_pliku, "r");
     char ch;
     while(!feof(plik)&&(ch=fgetc(plik))!=EOF)
     {
         if(ch<0)ch+=128;
-        ++prawd[ch].prawd;
+        ++prawd[(unsigned char)ch].prawd;
     }
     fclose(plik);
 }
 
-void koduj(int ile_plikow, char **nazwy_plikow, unsigned char **kodowania, FILE *ptr, char *plik_wyj)
+void koduj(int ile_plikow, char **nazwy_plikow, char **kodowania, FILE *ptr, char *plik_wyj)
 {
     unsigned char b=0, pot=1;
     unsigned char licznik=0;
@@ -115,7 +115,7 @@ void koduj(int ile_plikow, char **nazwy_plikow, unsigned char **kodowania, FILE 
     remove("huffman.temp");
 }
 
-void wpisz_kodowania(tree drzewko, unsigned char **kodowania, unsigned char *sciezka, int *dl_sciezki)
+void wpisz_kodowania(tree drzewko, char **kodowania, char *sciezka, int *dl_sciezki)
 {
     if(drzewko->ma_wart)
     {
@@ -163,8 +163,8 @@ void zakoduj(int odkad, int ile_plikow, char **nazwy_plikow, char *plik_wyj, boo
     drzewko_huffmana->prawd=drzewa->wart->prawd;
     drzewko_huffmana->prawd+=drzewa->next->wart->prawd;
 
-    unsigned char **kodowania=calloc(sizeof(char*), 260);
-    unsigned char *sciezka=calloc(sizeof(char), 260);
+    char **kodowania=calloc(sizeof(char*), 260);
+    char *sciezka=calloc(sizeof(char), 260);
     sciezka[0]='\0';
     int dl_sciezki;
     dl_sciezki=0;
@@ -191,7 +191,7 @@ void zakoduj(int odkad, int ile_plikow, char **nazwy_plikow, char *plik_wyj, boo
     }
 }
 
-void odkoduj(unsigned char *nazwa_pliku)
+void odkoduj(char *nazwa_pliku)
 {
     FILE *ptr=fopen(nazwa_pliku, "rb");
 
@@ -242,7 +242,7 @@ void odkoduj(unsigned char *nazwa_pliku)
         char dl_nazwy;
         fread(&dl_nazwy, sizeof(char), 1, ptr);
         char nazwa_pliku[dl_nazwy+1];
-        nazwa_pliku[dl_nazwy]='\0';
+        nazwa_pliku[(unsigned char)dl_nazwy]='\0';
         fread(&nazwa_pliku, sizeof(unsigned char), dl_nazwy, ptr);
 
         FILE *plik_wyj=fopen(nazwa_pliku, "w");
