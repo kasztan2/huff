@@ -6,9 +6,11 @@ int main(int argc, char **argv)
     bool stats=false;
     bool o_flag=false;
     bool debug_flag=false;
+    bool path_flag=false;
     int opt;
     char *plik_wyj=NULL;
-    while((opt=getopt(argc, argv, "so:dh"))!=-1)
+    char *path_out=".";
+    while((opt=getopt(argc, argv, "so:dp:h"))!=-1)
     {
         switch(opt)
         {
@@ -26,6 +28,12 @@ int main(int argc, char **argv)
             case 'd':
             {
                 debug_flag=true;
+                break;
+            }
+            case 'p':
+            {
+                path_out=optarg;
+                path_flag=true;
                 break;
             }
             case 'h':
@@ -64,6 +72,11 @@ int main(int argc, char **argv)
 
     if(strcmp(argv[optind], "encode")==0)
     {
+        if(path_flag)
+        {
+            fprintf(stderr, "😳 Niedozwolona opcja!\n");
+            exit(EXIT_FAILURE);
+        }
         if(stats)printf("Statystyki 📈:\n");
         zakoduj(optind+1, argc-o_flag*2-stats-2-debug_flag, argv, plik_wyj, stats);
     }
@@ -74,7 +87,7 @@ int main(int argc, char **argv)
             fprintf(stderr, "😳 Niedozwolona opcja!\n");
             exit(EXIT_FAILURE);
         }
-        odkoduj(*(argv+optind+1));
+        odkoduj(*(argv+optind+1), path_out);
     }
     else fprintf(stderr, "❌ Złe polecenie! Użyj %s -h, aby wyświetlić pomoc ℹ️\n", argv[0]);
 

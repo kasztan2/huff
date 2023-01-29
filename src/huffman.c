@@ -191,7 +191,7 @@ void zakoduj(int odkad, int ile_plikow, char **nazwy_plikow, char *plik_wyj, boo
     }
 }
 
-void odkoduj(char *nazwa_pliku)
+void odkoduj(char *nazwa_pliku, char *path_out)
 {
     FILE *ptr=fopen(nazwa_pliku, "rb");
 
@@ -245,7 +245,13 @@ void odkoduj(char *nazwa_pliku)
         nazwa_pliku[(unsigned char)dl_nazwy]='\0';
         fread(&nazwa_pliku, sizeof(unsigned char), dl_nazwy, ptr);
 
-        FILE *plik_wyj=fopen(nazwa_pliku, "w");
+        char *sciezka=calloc(sizeof(char), 500);
+        strcpy(sciezka, path_out);
+        strcat(sciezka, "/");
+        strcat(sciezka, nazwa_pliku);
+
+        FILE *plik_wyj=fopen(sciezka, "w");
+        free(sciezka);
         for(long long nr_bajtu=0; nr_bajtu<ile_bajtow[i]-1; ++nr_bajtu)
         {
             fread(&wej, sizeof(char), 1, ptr);
