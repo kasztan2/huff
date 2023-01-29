@@ -48,7 +48,7 @@ int main(int argc, char **argv)
 
     if(optind>=argc)
     {
-        fprintf(stderr, "Brakujący argument!\n");
+        fprintf(stderr, "Brakujący argument! Użyj -h, aby wyświetlić pomoc\n");
         exit(EXIT_FAILURE);
     }
 
