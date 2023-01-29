@@ -18,6 +18,7 @@ void policz_prawdopodobienstwa(znak prawd[256], unsigned char *nazwa_pliku)
     char ch;
     while(!feof(plik)&&(ch=fgetc(plik))!=EOF)
     {
+        if(ch<0)ch+=128;
         ++prawd[ch].prawd;
     }
     fclose(plik);
@@ -172,8 +173,14 @@ void zakoduj(int odkad, int ile_plikow, char **nazwy_plikow, char *plik_wyj, boo
     FILE *output=fopen("huffman.temp", "wb");
     koduj(ile_plikow, nazwy_plikow, kodowania, output, plik_wyj);
 
+    for(int i=0; i<260; ++i)
+    {
+        if(kodowania[i]!=NULL)free(kodowania[i]);
+    }
     free(kodowania);
     free(sciezka);
+    usun_drzewo(drzewko_huffmana);
+    usun_liste(drzewa);
     if(stats)
     {
         FILE *wyjscie=fopen(plik_wyj, "r");
@@ -271,4 +278,6 @@ void odkoduj(unsigned char *nazwa_pliku)
     }
 
     fclose(ptr);
+
+    usun_drzewo(drzewko);
 }

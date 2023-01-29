@@ -72,4 +72,7 @@ int main(int argc, char **argv)
         odkoduj(*(argv+optind+1));
     }
     else fprintf(stderr, "Złe polecenie! Użyj -h, aby wyświetlić pomoc\n");
+
+    if(optarg!=NULL)free(optarg);
+    exit(EXIT_SUCCESS);
 }

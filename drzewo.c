@@ -78,3 +78,18 @@ int dlugosc_listy(lista l)
     }
     return licznik;
 }
+
+void usun_drzewo(tree drzewo)
+{
+    if(drzewo==NULL)return;
+    if(drzewo->lewy!=NULL)usun_drzewo(drzewo->lewy);
+    if(drzewo->prawy!=NULL)usun_drzewo(drzewo->prawy);
+    free(drzewo);
+}
+
+void usun_liste(lista l)
+{
+    if(l==NULL)return;
+    if(l->next!=NULL)usun_liste(l->next);
+    free(l);
+}

@@ -30,4 +30,7 @@ lista dodaj_element(lista pocz, tree t);
 lista drzewo_rosnie(lista drzewa);
 int dlugosc_listy(lista l);
 
+void usun_drzewo(tree drzewo);
+void usun_liste(lista l);
+
 #endif
