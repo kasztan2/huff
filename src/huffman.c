@@ -186,7 +186,18 @@ void zakoduj(int odkad, int ile_plikow, char **nazwy_plikow, char *plik_wyj, boo
         FILE *wyjscie=fopen(plik_wyj, "r");
         fseek(wyjscie, 0L, SEEK_END);
         printf("Rozmiar przed kompresją: %lld\n", bajty);
-        printf("Rozmiar po kompresji: %ld\n", ftell(wyjscie));
+        long rozm=ftell(wyjscie);
+        printf("Rozmiar po kompresji: %ld\n", rozm);
+        if(rozm>=bajty)
+        {
+            rozm-=bajty;
+            printf("O %.1f%% \x1B[31;40mwięcej\x1B[0m 😩\n", (float)rozm/(float)bajty*100);
+        }
+        else
+        {
+            bajty-=rozm;
+            printf("O %.1f%% \x1B[32;40mmniej\x1B[0m 😎\n", (float)bajty/(float)rozm*100);
+        }
         fclose(wyjscie);
     }
 }

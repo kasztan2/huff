@@ -42,7 +42,7 @@ int main(int argc, char **argv)
                 printf("Instrukcja:\n");
                 printf("encode <plik wejściowy 1> <plik wejściowy 2> ...\n");
                 printf("decode <nazwa pliku archiwum do rozpakowania>\n");
-                printf("Opcje:\n-o <nazwa pliku>    określ nazwę pliku wyjściowego (archiwum), tylko do encode\n-d                  wypisuj dodatkowe informacje do debugowania\n-s                  wypisz statystyki, tylko do encode\n-h                  pomoc\n");
+                printf("Opcje:\n-o <nazwa pliku>    określ nazwę pliku wyjściowego (archiwum), tylko do encode\n-d                  wypisuj dodatkowe informacje do debugowania\n-s                  wypisz statystyki, tylko do encode\n-h                  pomoc\n-p <ścieżka>        określ ścieżkę gdzie \"wypakować\" archiwum, tylko do decode\n");
                 exit(EXIT_SUCCESS);
             }
         }
@@ -50,7 +50,7 @@ int main(int argc, char **argv)
 
     if(optind>=argc-1)
     {
-        fprintf(stderr, "🔭 Brakujący argument (nawet w kosmosie go nie widać)! Użyj %s -h, aby wyświetlić pomoc ℹ️\n", argv[0]);
+        fprintf(stderr, "🔎🤷 Brakujący argument! Użyj \x1B[31;40m%s -h\x1B[0m, aby wyświetlić pomoc ℹ️\n", argv[0]);
         exit(EXIT_FAILURE);
     }
 
@@ -89,7 +89,7 @@ int main(int argc, char **argv)
         }
         odkoduj(*(argv+optind+1), path_out);
     }
-    else fprintf(stderr, "❌ Złe polecenie! Użyj %s -h, aby wyświetlić pomoc ℹ️\n", argv[0]);
+    else fprintf(stderr, "❌ Złe polecenie! Użyj \x1B[31;40m%s -h\x1B[0m, aby wyświetlić pomoc ℹ️\n", argv[0]);
 
     if(optarg!=NULL)free(optarg);
     exit(EXIT_SUCCESS);
