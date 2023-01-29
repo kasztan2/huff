@@ -8,18 +8,12 @@ int main(int argc, char **argv)
         switch(opt)
         {
             case 'h':
-            {
-                printf("Instrukcja:\n");
-                printf("encode <plik wyjściowy> <plik wejściowy 1> <plik wejściowy 2> ...\n");
-                printf("decode <nazwa pliku archiwum do rozpakowania>\n");
-                return 0;
-            }
             default:
             {
                 printf("Instrukcja:\n");
                 printf("encode <plik wyjściowy> <plik wejściowy 1> <plik wejściowy 2> ...\n");
                 printf("decode <nazwa pliku archiwum do rozpakowania>\n");
-                exit(EXIT_FAILURE);
+                return 0;
             }
         }
     }
