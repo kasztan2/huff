@@ -74,6 +74,5 @@ int main(int argc, char **argv)
     else fprintf(stderr, "Złe polecenie! Użyj %s -h, aby wyświetlić pomoc\n", argv[0]);
 
     if(optarg!=NULL)free(optarg);
-    //if(plik_wyj!=NULL)free(plik_wyj);
     exit(EXIT_SUCCESS);
 }
