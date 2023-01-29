@@ -14,7 +14,6 @@ int main(int argc, char **argv)
         {
             case 's':
             {
-                printf("Statystyki:\n");
                 stats=true;
                 break;
             }
@@ -65,10 +64,16 @@ int main(int argc, char **argv)
 
     if(strcmp(argv[optind], "encode")==0)
     {
+        if(stats)printf("Statystyki:\n");
         zakoduj(optind+1, argc-o_flag*2-stats-2-debug_flag, argv, plik_wyj, stats);
     }
     else if(strcmp(argv[optind], "decode")==0)
     {
+        if(stats||o_flag)
+        {
+            fprintf(stderr, "Niedozwolona opcja!\n");
+            exit(EXIT_FAILURE);
+        }
         odkoduj(*(argv+optind+1));
     }
     else fprintf(stderr, "Złe polecenie! Użyj %s -h, aby wyświetlić pomoc\n", argv[0]);
