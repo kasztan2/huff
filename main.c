@@ -33,8 +33,9 @@ int main(int argc, char **argv)
             default:
             {
                 printf("Instrukcja:\n");
-                printf("encode -o <plik wyjściowy> <plik wejściowy 1> <plik wejściowy 2> ...\n");
+                printf("encode <plik wejściowy 1> <plik wejściowy 2> ...\n");
                 printf("decode <nazwa pliku archiwum do rozpakowania>\n");
+                printf("Opcje:\n-o <nazwa pliku>    określ nazwę pliku wyjściowego (archiwum), tylko do encode\n-d                  wypisuj dodatkowe informacje do debugowania\n-s                  wypisz statystyki, tylko do encode\n-h                  pomoc\n");
                 exit(EXIT_SUCCESS);
             }
         }
