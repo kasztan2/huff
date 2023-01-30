@@ -14,29 +14,29 @@ int main(int argc, char **argv)
     {
         switch(opt)
         {
-            case 's':
+            case 's'://? czy wyświetlać statystyki
             {
                 stats=true;
                 break;
             }
-            case 'o':
+            case 'o'://? nazwa wyjściowego pliku archiwum
             {
                 plik_wyj=optarg;
                 o_flag=true;
                 break;
             }
-            case 'd':
+            case 'd'://? wyświetlaj dodatkowe informacje do debugowania
             {
                 debug_flag=true;
                 break;
             }
-            case 'p':
+            case 'p'://? ścieżka gdzie wypakować archiwum
             {
                 path_out=optarg;
                 path_flag=true;
                 break;
             }
-            case 'h':
+            case 'h'://? pomoc programu
             default:
             {
                 printf("Instrukcja:\n");

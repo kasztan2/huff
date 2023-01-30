@@ -1,0 +1,15 @@
+Zbiór tekstów, na których testowałem:
+1. Pan Tadeusz w txt, link: https://wolnelektury.pl/media/book/txt/pan-tadeusz.txt
+2. Makbet w oryginale ze strony MIT, link: http://shakespeare.mit.edu/macbeth/full.html
+3. Konstytucja Republiki Hawajów w oryginale (1894 Kumukanawai o ka Repubalika o Hawaii), link (można wybrać format txt): https://ws-export.wmcloud.org/?lang=mul&title=1894_Kumukanawai_o_ka_Repubalika_o_Hawaii
+4. Tekst po chińsku (chyba dosyć krótki), link: https://ctext.org/nan-jing/jing-mai-zhen-hou
+5. Ulysses, James Joyce, po angielsku, link: https://gutenberg.org/files/4300/4300-0.txt
+6. Potop, Tom Pierwszy, link: https://czytac.com/files/1550_potop_tom_pierwszy.txt
+
+Wyniki mojego programu:
+1. -13.5%
+2. -38.6%
+3. -22.4%
+4. +38.5%
+5. -38.7%
+6. -10.9%
