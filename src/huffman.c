@@ -190,13 +190,11 @@ void zakoduj(int odkad, int ile_plikow, char **nazwy_plikow, char *plik_wyj, boo
         printf("Rozmiar po kompresji: %ld\n", rozm);
         if(rozm>=bajty)
         {
-            rozm-=bajty;
-            printf("O %.1f%% \x1B[31;40mwięcej\x1B[0m 😩\n", (float)rozm/(float)bajty*100);
+            printf("O %.1f%% \x1B[31;40mwięcej\x1B[0m 😩\n", (float)(rozm-bajty)/(float)rozm*100);
         }
         else
         {
-            bajty-=rozm;
-            printf("O %.1f%% \x1B[32;40mmniej\x1B[0m 😎\n", (float)bajty/(float)rozm*100);
+            printf("O %.1f%% \x1B[32;40mmniej\x1B[0m 😎\n", (float)(bajty-rozm)/(float)bajty*100);
         }
         fclose(wyjscie);
     }
