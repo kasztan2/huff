@@ -1,8 +1,10 @@
 #include "huffman.h"
 #include "drzewo.h"
 
+//zmienna licząca łącznie ile bajtów mają wszystkie wejściowe pliki do skompresowania
 static long long bajty;
 
+//? komparator do sortowania struktury "znak" po ilości wystąpień ~znaku
 int comp_znaki_prawd(const void *x, const void *y)
 {
     znak *a=(znak*)x;
@@ -12,6 +14,9 @@ int comp_znaki_prawd(const void *x, const void *y)
     return 0;
 }
 
+//? funkcja licząca częstotliwości występowania ~znaków w konkretnym pliku
+//prawd - tablica częstotliwości wystąpień (łącznie w różnych plikach)
+//nazwa_pliku - nazwa aktualnie analizowanego pliku
 void policz_prawdopodobienstwa(znak prawd[256], char *nazwa_pliku)
 {
     FILE *plik=fopen(nazwa_pliku, "r");
@@ -24,6 +29,12 @@ void policz_prawdopodobienstwa(znak prawd[256], char *nazwa_pliku)
     fclose(plik);
 }
 
+//? właściwa funkcja wpisująca do archiwum
+//ile_plikow - liczba plików
+//nazwy_plików - nazwy plików do skompresowania
+//kodowania - tablica stringów złożonych z zer i jedynek, kodowania konkretnych ~znaków
+//ptr - wskaźnik do pliku tymczasowego, który później jest usuwany
+//plik_wyj - nazwa wyjściowego archiwum
 void koduj(int ile_plikow, char **nazwy_plikow, char **kodowania, FILE *ptr, char *plik_wyj)
 {
     unsigned char b=0, pot=1;
@@ -102,7 +113,7 @@ void koduj(int ile_plikow, char **nazwy_plikow, char **kodowania, FILE *ptr, cha
 
     char ch;
     int przepisano=0;
-    while(!feof(do_skopiowania))//((ch=fgetc(do_skopiowania))!=EOF)//? dlaczego taka wersja tutaj nie działała?
+    while(!feof(do_skopiowania))
     {
         ch=fgetc(do_skopiowania);
         if(feof(do_skopiowania))break;
@@ -115,6 +126,11 @@ void koduj(int ile_plikow, char **nazwy_plikow, char **kodowania, FILE *ptr, cha
     remove("huffman.temp");
 }
 
+//? funkcja wpisująca kodowania ~znaków z drzewa do tablicy stringów złożonych z 0 i 1
+//drzewko - wskaźnik na wierzchołek drzewa
+//kodowania - wyjściowa tablica stringów
+//sciezka - ścieżka na drzewie (prawo-lewo) do obecnego wierzchołka
+//dl_sciezki - długość ścieżki na drzewie do obecnego wierzchołka
 void wpisz_kodowania(tree drzewko, char **kodowania, char *sciezka, int *dl_sciezki)
 {
     if(drzewko->ma_wart)
@@ -136,6 +152,12 @@ void wpisz_kodowania(tree drzewko, char **kodowania, char *sciezka, int *dl_scie
     (*dl_sciezki)--;
 }
 
+//? główna funkcja tworząca archiwum z podanych plików (kompresująca)
+//odkad - od którego indeksu argv czytać nazwy plików
+//ile_plikow - liczba plików na wejściu
+//nazwy_plikow - stringi z nazwami plików od indeksu %odkad%
+//plik_wyj - nazwa pliku wyjściowego (archiwum), domyślnie "arch.huff"
+//stats - czy ma wyświetlać statystyki
 void zakoduj(int odkad, int ile_plikow, char **nazwy_plikow, char *plik_wyj, bool stats)
 {
     bajty=0;
@@ -200,6 +222,9 @@ void zakoduj(int odkad, int ile_plikow, char **nazwy_plikow, char *plik_wyj, boo
     }
 }
 
+//? główna funkcja, wypakowuje archiwum
+//nazwa_pliku - nazwa archiwum
+//path_out - ścieżka gdzie wypakować
 void odkoduj(char *nazwa_pliku, char *path_out)
 {
     FILE *ptr=fopen(nazwa_pliku, "rb");

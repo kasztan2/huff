@@ -4,10 +4,10 @@
 
 typedef struct Node
 {
-    bool ma_wart;
-    unsigned char wart;
-    long long prawd;
-    struct Node *lewy, *prawy;
+    bool ma_wart;//? czy ma wartości w sobie
+    unsigned char wart;//? jaki ~znak
+    long long prawd;//? ilość wystąpień ~znaku
+    struct Node *lewy, *prawy;//? wskaźniki na dzieci
 } Node;
 
 typedef Node* tree;

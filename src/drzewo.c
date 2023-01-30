@@ -3,6 +3,7 @@
 #include <math.h>
 #include "drzewo.h"
 
+//? tworzy nowe drzewo (wierzchołek) z wartościami
 tree nowe_drzewo(unsigned char wart, long long prawd)
 {
     tree drzewko=malloc(sizeof(Node));
@@ -14,6 +15,7 @@ tree nowe_drzewo(unsigned char wart, long long prawd)
     return drzewko;
 }
 
+//? tworzy nowe drzewo (wierzchołek) bez wartości
 tree nowe_drzewo_puste()
 {
     tree drzewko=malloc(sizeof(Node));
@@ -31,6 +33,7 @@ lista nowa_lista(tree t)
     return elem;
 }
 
+//? dodaje element (drzewo %t%) do listy %pocz%
 lista dodaj_element(lista pocz, tree t)
 {
     lista pocz_kopia=pocz;
@@ -39,6 +42,7 @@ lista dodaj_element(lista pocz, tree t)
     return pocz_kopia;
 }
 
+//? łączy dwa drzewa z największą sumą wystąpień, usuwa je z początku listy i dodaje w odpowiednim miejscu drzewo z połączonych drzew
 lista drzewo_rosnie(lista drzewa)
 {
     lista it=drzewa;
@@ -69,6 +73,7 @@ lista drzewo_rosnie(lista drzewa)
     return drzewa;
 }
 
+//? zwraca długość listy %l%
 int dlugosc_listy(lista l)
 {
     int licznik=1;
@@ -80,6 +85,7 @@ int dlugosc_listy(lista l)
     return licznik;
 }
 
+//? usuwa drzewo, zwalnia pamięć (rekurencyjnie)
 void usun_drzewo(tree drzewo)
 {
     if(drzewo==NULL)return;
@@ -88,6 +94,7 @@ void usun_drzewo(tree drzewo)
     free(drzewo);
 }
 
+//? usuwa listę, zwalnia pamięć (rekurencyjnie)
 void usun_liste(lista l)
 {
     if(l==NULL)return;
